@@ -13,8 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.syed.osama.hassan.springsecurity.security.model.Role.ADMIN;
-import static com.syed.osama.hassan.springsecurity.security.model.Role.STUDENT;
+import static com.syed.osama.hassan.springsecurity.security.model.Role.*;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +25,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
@@ -51,7 +51,13 @@ public class SecurityConfig {
                 .roles(ADMIN.name())
                 .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
+        UserDetails manager = User.builder()
+                .username("manager")
+                .password(passwordEncoder.encode("admin"))
+                .roles(MANAGER.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin, manager);
     }
 
 }

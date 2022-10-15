@@ -1,11 +1,11 @@
 package com.syed.osama.hassan.springsecurity.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class Student {
     private final Integer id;

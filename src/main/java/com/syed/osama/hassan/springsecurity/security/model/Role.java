@@ -10,7 +10,8 @@ import static com.syed.osama.hassan.springsecurity.security.model.Permission.*;
 @AllArgsConstructor
 public enum Role {
     STUDENT(Sets.newHashSet()),
-    ADMIN(Sets.newHashSet(COURSE_WRITE, COURSE_READ, STUDENT_WRITE, STUDENT_READ));
+    ADMIN(Sets.newHashSet(COURSE_WRITE, COURSE_READ, STUDENT_WRITE, STUDENT_READ)),
+    MANAGER(Sets.newHashSet(COURSE_READ, STUDENT_READ));
 
     private final Set<Permission> permissions;
 }
