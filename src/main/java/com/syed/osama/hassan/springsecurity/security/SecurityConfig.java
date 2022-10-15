@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.syed.osama.hassan.springsecurity.security.model.Role.ADMIN;
+import static com.syed.osama.hassan.springsecurity.security.model.Role.STUDENT;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -39,10 +42,16 @@ public class SecurityConfig {
         UserDetails user = User.builder()
                 .username("John")
                 .password(passwordEncoder.encode("password"))
-                .roles("STUDENT") // ROLE_STUDENT
+                .roles(STUDENT.name()) // ROLE_STUDENT
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin"))
+                .roles(ADMIN.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
 }
