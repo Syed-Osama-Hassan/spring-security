@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.syed.osama.hassan.springsecurity.security.model.Permission.COURSE_WRITE;
 import static com.syed.osama.hassan.springsecurity.security.model.Role.*;
@@ -27,14 +28,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeRequests()
                 .antMatchers("/", "index").permitAll()
-                /*.antMatchers("/api/**").hasRole(STUDENT.name())
-                .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(GET, "/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())*/
                 .anyRequest()
                 .authenticated()
                 .and()
