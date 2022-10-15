@@ -13,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.syed.osama.hassan.springsecurity.security.model.Permission.COURSE_WRITE;
 import static com.syed.osama.hassan.springsecurity.security.model.Role.*;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +31,10 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/", "index").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
+                .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(GET, "/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -42,19 +48,22 @@ public class SecurityConfig {
         UserDetails user = User.builder()
                 .username("John")
                 .password(passwordEncoder.encode("password"))
-                .roles(STUDENT.name()) // ROLE_STUDENT
+//                .roles(STUDENT.name()) // ROLE_STUDENT
+                .authorities(STUDENT.getAuthorities())
                 .build();
 
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("admin"))
-                .roles(ADMIN.name())
+//                .roles(ADMIN.name())
+                .authorities(ADMIN.getAuthorities())
                 .build();
 
         UserDetails manager = User.builder()
                 .username("manager")
                 .password(passwordEncoder.encode("admin"))
-                .roles(MANAGER.name())
+//                .roles(MANAGER.name())
+                .authorities(MANAGER.getAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin, manager);
