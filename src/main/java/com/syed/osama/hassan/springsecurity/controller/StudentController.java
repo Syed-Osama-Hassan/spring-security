@@ -1,6 +1,7 @@
 package com.syed.osama.hassan.springsecurity.controller;
 
 import com.syed.osama.hassan.springsecurity.model.Student;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class StudentController {
     );
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     public Student getStudentById(@PathVariable Integer id) {
 
         return STUDENTS.stream()

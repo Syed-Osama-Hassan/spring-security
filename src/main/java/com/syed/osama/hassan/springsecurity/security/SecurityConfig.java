@@ -30,11 +30,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index").permitAll()
-                .antMatchers("/api/**").hasRole(STUDENT.name())
+                /*.antMatchers("/api/**").hasRole(STUDENT.name())
                 .antMatchers(DELETE, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 .antMatchers(PUT, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 .antMatchers(POST, "/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(GET, "/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
+                .antMatchers(GET, "/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())*/
                 .anyRequest()
                 .authenticated()
                 .and()
