@@ -16,6 +16,8 @@ public class Config {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/", "index")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
