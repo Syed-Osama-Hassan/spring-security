@@ -14,6 +14,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.syed.osama.hassan.springsecurity.security.model.Permission.COURSE_WRITE;
 import static com.syed.osama.hassan.springsecurity.security.model.Role.*;
 import static org.springframework.http.HttpMethod.*;
@@ -39,7 +41,10 @@ public class SecurityConfig {
                 .loginPage("/login").permitAll()
                 .defaultSuccessUrl("/courses", true)
                 .and()
-                .rememberMe(); // Default to 2 weeks
+                .rememberMe() // Default to 2 weeks
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                    .key("securedKey");
+        
 
         return http.build();
     }
