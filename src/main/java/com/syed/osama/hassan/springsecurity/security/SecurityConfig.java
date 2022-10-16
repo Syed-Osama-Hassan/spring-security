@@ -1,8 +1,10 @@
 package com.syed.osama.hassan.springsecurity.security;
 
+import com.syed.osama.hassan.springsecurity.auth.service.ApplicationUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +26,7 @@ import static com.syed.osama.hassan.springsecurity.security.model.Role.*;
 @AllArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,29 +61,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("John")
-                .password(passwordEncoder.encode("password"))
-//                .roles(STUDENT.name()) // ROLE_STUDENT
-                .authorities(STUDENT.getAuthorities())
-                .build();
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
 
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin"))
-//                .roles(ADMIN.name())
-                .authorities(ADMIN.getAuthorities())
-                .build();
-
-        UserDetails manager = User.builder()
-                .username("manager")
-                .password(passwordEncoder.encode("admin"))
-//                .roles(MANAGER.name())
-                .authorities(MANAGER.getAuthorities())
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin, manager);
+        return provider;
     }
 
 }
