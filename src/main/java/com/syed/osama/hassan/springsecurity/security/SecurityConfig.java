@@ -38,10 +38,12 @@ public class SecurityConfig {
                 .formLogin()
                     .loginPage("/login").permitAll()
                     .defaultSuccessUrl("/courses", true)
+                    .usernameParameter("username")
                 .and()
                 .rememberMe() // Default to 2 weeks
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
                     .key("securedKey")
+                    .rememberMeParameter("remember-me")
                 .and()
                 .logout()
                     .logoutUrl("/logout")
